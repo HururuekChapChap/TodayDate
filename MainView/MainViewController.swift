@@ -11,9 +11,13 @@ import CoreLocation
 
 class MainViewController: UIViewController {
 
-   @IBOutlet weak var nickname: UILabel!
-       
+    @IBOutlet weak var nickname: UILabel!
+    @IBOutlet weak var KakaoToken: UILabel!
+    
+    @IBOutlet weak var WeatherImg: UIImageView!
     @IBOutlet weak var temperature: UILabel!
+    @IBOutlet weak var realTemperature: UILabel!
+    @IBOutlet weak var minMaxTempertature: UILabel!
     
     //종료 버튼 - 버튼 스타일을 정의 해주기 위해서
     @IBOutlet weak var CloseBtn: UIButton!
@@ -21,18 +25,23 @@ class MainViewController: UIViewController {
     @IBOutlet var InfoView: UIView!
     //Mark: DimView
     @IBOutlet weak var DimView: UIView!
+    
+    @IBOutlet weak var WeatherView: UIView!
     //스토어 프로퍼티를 정의 해주었다.
-    var WeatherInfo : OpenWeather? {
+    var WeatherInfo : WeatherInfo? {
         
         //초기화가 처음으로 완료 될 때, 수행 해주도록 하였다.
         didSet{
             
+            print("didSet 발동")
             DispatchQueue.main.async {
                 self.updateUI()
             }
             
         }
     }
+    
+    let weatherModel = WeatherModel()
     
     //X 버튼을 눌렀을 경우
     @IBAction func CloseBtnAct(_ sender: Any) {
@@ -69,30 +78,37 @@ class MainViewController: UIViewController {
        override func viewDidLoad() {
            super.viewDidLoad()
         
-        //클로저를 통해서 결과값이 반환이 된다면 그때 수행하도록 하였다.
-        mainViewModel.GetWeatherInfo { (result) in
-            
+//        //클로저를 통해서 결과값이 반환이 된다면 그때 수행하도록 하였다.
+        weatherModel.GetWeatherInfo { (result) in
+
             switch result {
                 case .failure(let error):
                     print(error)
             case .success(let weatherInfo):
+                print("성공")
                 self.WeatherInfo = weatherInfo
             }
         }
+        
+        
+        WeatherView.layer.cornerRadius = 15
+        WeatherView.layer.borderWidth = 2
+        WeatherView.layer.borderColor = UIColor.systemPink.cgColor
         //InfoView의 곡면을 20 정도 깍아주었다.
         InfoView.layer.cornerRadius = 20
         //경계선의 굵기와 색깔 그리고 둥글게 해주기 위해 곡면을 깍아주었다.
-        CloseBtn.layer.borderWidth = 2
-        CloseBtn.layer.borderColor = UIColor.gray.cgColor
+        CloseBtn.layer.borderWidth = 1
+        CloseBtn.layer.borderColor = UIColor.white.cgColor
         CloseBtn.layer.cornerRadius = CloseBtn.bounds.width / 2
-        
        }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        updateInfo()
     }
         
-    //네비게이션 관련 설정
+        //네비게이션 관련 설정
        //https://zeddios.tistory.com/574
        override func viewWillAppear(_ animated: Bool) {
            super.viewWillAppear(animated)
@@ -108,19 +124,32 @@ class MainViewController: UIViewController {
        @IBAction func Logout(_ sender: Any) {
            
            UserDefaults.standard.removeObject(forKey: "userNode")
-           nickname.text = "로그인 해주세요"
-        
+    
         guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "ViewController") else{return}
                   vc.modalPresentationStyle = .fullScreen
                   self.present(vc, animated: true, completion: nil)
        }
+    
+    func updateInfo(){
+        
+        if let InfoNode = self.mainViewModel.PersonalInfo{
+            
+            self.nickname.text = "\(InfoNode.nickName)"
+            self.KakaoToken.text = "\(InfoNode.id)"
+            
+        }
+        
+    }
        
-       private func updateUI(){
+       func updateUI(){
         
-         if let InfoNode = self.mainViewModel.PersonalInfo, let weatherInfo = WeatherInfo{
-                        self.nickname.text = InfoNode.nickName
-                        self.temperature.text = String(weatherInfo.main.temp)
-        
+        if let weatherInfo = WeatherInfo{
+
+            self.temperature.text = "\( Int(weatherInfo.openWeather.main.temp - 273) )°C"
+            self.realTemperature.text = "\( Int(weatherInfo.openWeather.main.feels_like - 273))°C"
+            self.minMaxTempertature.text = "\( Int(weatherInfo.openWeather.main.temp_max - 273))°C / \(Int(weatherInfo.openWeather.main.temp_min - 273))°C"
+            self.WeatherImg.image = weatherInfo.imageData
+
                               }
 
        }

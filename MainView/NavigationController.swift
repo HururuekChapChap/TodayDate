@@ -38,7 +38,7 @@ class NavigationController: UINavigationController , CLLocationManagerDelegate {
                location.startUpdatingLocation()
                guard let coorlocation = location.location?.coordinate else {return}
                print("NavigationController UpdateLocation passed")
-               MainViewModel.shared.setLocation(latitude: String(coorlocation.latitude), longitude: String(coorlocation.longitude))
+               mainViewModel.setLocation(latitude: String(coorlocation.latitude), longitude: String(coorlocation.longitude))
                        }
 
        }
@@ -47,16 +47,17 @@ class NavigationController: UINavigationController , CLLocationManagerDelegate {
     private func changeView(){
         
           if let InfoNode = InfoNode{
+            
+            guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainViewController") as? MainViewController else{return}
                 
-                guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainViewController") as? MainViewController else{return}
-            
-            UINavigationController(rootViewController: vc).modalTransitionStyle = .crossDissolve
-            
-            MainViewModel.shared.PersonalInfo = InfoNode
-            
-            self.navigationController?.pushViewController(vc, animated: true)
+                 self.mainViewModel.PersonalInfo = InfoNode
+
+                UINavigationController(rootViewController: vc).modalTransitionStyle = .crossDissolve
+                self.navigationController?.pushViewController(vc, animated: true)
             
           }
       }
 
 }
+
+

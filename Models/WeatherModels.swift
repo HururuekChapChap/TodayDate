@@ -8,6 +8,12 @@
 
 import Foundation
 
+struct WeatherInfo {
+    
+    let imageData : UIImage
+    let openWeather : OpenWeather
+}
+
 struct OpenWeather : Codable{
     
     let weather : [Weather]
@@ -27,6 +33,7 @@ struct Main : Codable{
 
 struct Weather : Codable{
     
+    let icon : String
     let description : String
     
 }
