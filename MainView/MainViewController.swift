@@ -27,22 +27,163 @@ class MainViewController: UIViewController {
     @IBOutlet weak var DimView: UIView!
     
     @IBOutlet weak var WeatherView: UIView!
+    
+    @IBOutlet weak var ClothView: UIView!
+    
+    @IBOutlet weak var ClothDetailView: UIView!
+    @IBOutlet weak var DetailTitle: UILabel!
+    @IBOutlet weak var DetailLabel: UILabel!
+    
+    @IBOutlet weak var CollectionViewItem: UICollectionView!
     //스토어 프로퍼티를 정의 해주었다.
     var WeatherInfo : WeatherInfo? {
         
         //초기화가 처음으로 완료 될 때, 수행 해주도록 하였다.
         didSet{
-            
+            collectioinViewImgList = clothesList
             print("didSet 발동")
             DispatchQueue.main.async {
+                self.CollectionViewItem.reloadData()
                 self.updateUI()
             }
             
         }
     }
     
+    var collectioinViewImgList : [String] = []
+    
+    let clothesList : [String] = ["Sun.png","heart.png","Sun.png","heart.png","Sun.png","heart.png","Sun.png","heart.png"]
+    
     let weatherModel = WeatherModel()
     
+    let mainViewModel = MainViewModel.shared
+    
+    
+    
+    override func viewDidLoad() {
+           super.viewDidLoad()
+        
+//        //클로저를 통해서 결과값이 반환이 된다면 그때 수행하도록 하였다.
+        weatherModel.GetWeatherInfo { (result) in
+
+            switch result {
+                case .failure(let error):
+                    print(error)
+            case .success(let weatherInfo):
+                print("성공")
+                self.WeatherInfo = weatherInfo
+            }
+        }
+        
+        settingView()
+        
+       }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        updateInfo()
+    }
+        
+        //네비게이션 관련 설정
+       //https://zeddios.tistory.com/574
+    override func viewWillAppear(_ animated: Bool) {
+           super.viewWillAppear(animated)
+           self.navigationController?.isNavigationBarHidden = true
+       }
+       
+    override func viewWillDisappear(_ animated: Bool) {
+            super.viewWillDisappear(animated)
+            self.navigationController?.isNavigationBarHidden = false
+        }
+
+
+}
+
+//UI랑 관련된 함수
+extension MainViewController{
+    
+    func settingView(){
+        
+               ClothDetailView.layer.cornerRadius = 15
+               ClothDetailView.alpha = 0
+               DetailTitle.text = ""
+               DetailLabel.text = ""
+               
+               ClothView.layer.cornerRadius = 15
+               ClothView.layer.borderWidth = 2
+               ClothView.layer.borderColor = UIColor.systemOrange.cgColor
+               WeatherView.layer.cornerRadius = 15
+               WeatherView.layer.borderWidth = 2
+               WeatherView.layer.borderColor = UIColor.systemPink.cgColor
+               //InfoView의 곡면을 20 정도 깍아주었다.
+               InfoView.layer.cornerRadius = 20
+               //경계선의 굵기와 색깔 그리고 둥글게 해주기 위해 곡면을 깍아주었다.
+               CloseBtn.layer.borderWidth = 1
+               CloseBtn.layer.borderColor = UIColor.white.cgColor
+               CloseBtn.layer.cornerRadius = CloseBtn.bounds.width / 2
+        
+    }
+    
+    func updateInfo(){
+        
+        if let InfoNode = self.mainViewModel.PersonalInfo{
+            
+            self.nickname.text = "\(InfoNode.nickName)"
+            self.KakaoToken.text = "\(InfoNode.id)"
+            
+        }
+        
+    }
+       
+    func updateUI(){
+        
+       if let weatherInfo = WeatherInfo{
+    
+            self.temperature.text = "\( Int(weatherInfo.openWeather.main.temp - 273) )°C"
+            self.realTemperature.text = "\( Int(weatherInfo.openWeather.main.feels_like - 273))°C"
+            self.minMaxTempertature.text = "\( Int(weatherInfo.openWeather.main.temp_max - 273))°C / \(Int(weatherInfo.openWeather.main.temp_min - 273))°C"
+            self.WeatherImg.image = weatherInfo.imageData
+
+                }
+
+       }
+    
+}
+
+//버튼을 담당하는 Extension
+extension MainViewController{
+    
+    @IBAction func Logout(_ sender: Any) {
+           
+        UserDefaults.standard.removeObject(forKey: "userNode")
+    
+        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "ViewController") else{return}
+                  vc.modalPresentationStyle = .fullScreen
+                  self.present(vc, animated: true, completion: nil)
+       }
+    
+    //화면을 눌렀을 때, 자세한 내용의 설명이 사라지도록 했다.
+    @IBAction func TapBtn(_ sender: Any) {
+        
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: [], animations: {
+        self.ClothDetailView.alpha = 0
+        self.DetailTitle.text = ""
+        self.DetailLabel.text = ""
+           }, completion: nil)
+        
+    }
+    
+    //버튼을 눌렀을 때, 자세한 설명이 나오도록 하였다.
+    @IBAction func DetailBtn(_ sender: Any) {
+        
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: [], animations: {
+            self.ClothDetailView.alpha = 0.8
+            self.DetailTitle.text = "추천 의상"
+            self.DetailLabel.text = "자세한 내용"
+               }, completion: nil)
+        
+    }
     //X 버튼을 눌렀을 경우
     @IBAction func CloseBtnAct(_ sender: Any) {
         
@@ -73,85 +214,59 @@ class MainViewController: UIViewController {
         
     }
     
-    let mainViewModel = MainViewModel.shared
-    
-       override func viewDidLoad() {
-           super.viewDidLoad()
-        
-//        //클로저를 통해서 결과값이 반환이 된다면 그때 수행하도록 하였다.
-        weatherModel.GetWeatherInfo { (result) in
+}
 
-            switch result {
-                case .failure(let error):
-                    print(error)
-            case .success(let weatherInfo):
-                print("성공")
-                self.WeatherInfo = weatherInfo
-            }
-        }
-        
-        
-        WeatherView.layer.cornerRadius = 15
-        WeatherView.layer.borderWidth = 2
-        WeatherView.layer.borderColor = UIColor.systemPink.cgColor
-        //InfoView의 곡면을 20 정도 깍아주었다.
-        InfoView.layer.cornerRadius = 20
-        //경계선의 굵기와 색깔 그리고 둥글게 해주기 위해 곡면을 깍아주었다.
-        CloseBtn.layer.borderWidth = 1
-        CloseBtn.layer.borderColor = UIColor.white.cgColor
-        CloseBtn.layer.cornerRadius = CloseBtn.bounds.width / 2
-       }
+//collectionView
+extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSource , UICollectionViewDelegateFlowLayout{
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        updateInfo()
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return collectioinViewImgList.count
     }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        //네비게이션 관련 설정
-       //https://zeddios.tistory.com/574
-       override func viewWillAppear(_ animated: Bool) {
-           super.viewWillAppear(animated)
-           self.navigationController?.isNavigationBarHidden = true
-       }
-       
-        override func viewWillDisappear(_ animated: Bool) {
-               super.viewWillDisappear(animated)
-               self.navigationController?.isNavigationBarHidden = false
-           }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ClothCell", for: indexPath) as? ClothCell else {return UICollectionViewCell()}
+        
+        cell.UpdateImg(name: collectioinViewImgList[indexPath.item])
+        
+        return cell
+    }
+   
+    //이미지의 크기를 80 * 80 으로 해줬고 storyBoard에서 SizeExpecter - Estimate Size를 None으로 해준더. (Horizontal CollectionView일 경우)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+              
+              return CGSize(width: 80, height: 80)
+              
+          }
+  
+    
+    
+}
 
 
-       @IBAction func Logout(_ sender: Any) {
+//이미지 Horizontal collectionView의 Cell
+class ClothCell : UICollectionViewCell {
+    
+    @IBOutlet weak var clothImg: UIImageView!
+    
+    override func awakeFromNib() {
+           super.awakeFromNib()
            
-           UserDefaults.standard.removeObject(forKey: "userNode")
-    
-        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "ViewController") else{return}
-                  vc.modalPresentationStyle = .fullScreen
-                  self.present(vc, animated: true, completion: nil)
        }
-    
-    func updateInfo(){
-        
-        if let InfoNode = self.mainViewModel.PersonalInfo{
-            
-            self.nickname.text = "\(InfoNode.nickName)"
-            self.KakaoToken.text = "\(InfoNode.id)"
-            
-        }
-        
-    }
        
-       func updateUI(){
-        
-        if let weatherInfo = WeatherInfo{
-
-            self.temperature.text = "\( Int(weatherInfo.openWeather.main.temp - 273) )°C"
-            self.realTemperature.text = "\( Int(weatherInfo.openWeather.main.feels_like - 273))°C"
-            self.minMaxTempertature.text = "\( Int(weatherInfo.openWeather.main.temp_max - 273))°C / \(Int(weatherInfo.openWeather.main.temp_min - 273))°C"
-            self.WeatherImg.image = weatherInfo.imageData
-
-                              }
-
+    override func prepareForReuse() {
+           super.prepareForReuse()
+           
        }
-
+    
+    func reset() {
+           // TODO: reset로직 구현
+          clothImg = nil
+       }
+    
+    func UpdateImg(name : String){
+        clothImg.image = UIImage(named: name)
+    }
+    
 }

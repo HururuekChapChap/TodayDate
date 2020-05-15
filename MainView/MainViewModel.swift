@@ -18,7 +18,6 @@ class MainViewModel  {
     static let shared = MainViewModel()
     
     var PersonalInfo: PersonalInfo?
-    var WeatherInfo : WeatherInfo?
     var location : CLLocationManager?
     
     var latitude : String?
