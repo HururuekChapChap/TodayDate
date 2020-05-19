@@ -35,6 +35,11 @@ class MainViewController: UIViewController {
     @IBOutlet weak var DetailLabel: UILabel!
     
     @IBOutlet weak var CollectionViewItem: UICollectionView!
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
     //스토어 프로퍼티를 정의 해주었다.
     var WeatherInfo : WeatherInfo? {
         
@@ -49,6 +54,7 @@ class MainViewController: UIViewController {
             
         }
     }
+    
     
     var collectioinViewImgList : [String] = []
     
@@ -96,7 +102,6 @@ class MainViewController: UIViewController {
             super.viewWillDisappear(animated)
             self.navigationController?.isNavigationBarHidden = false
         }
-
 
 }
 
@@ -149,10 +154,93 @@ extension MainViewController{
 
        }
     
+    func showAlert(){
+        
+        let alert = UIAlertController(title: "오류", message: "날씨 정보를 가져오는 중 입니다", preferredStyle: UIAlertController.Style.alert)
+               
+        let Exit = UIAlertAction(title: "확인", style: .destructive)
+               
+        alert.addAction(Exit)
+               
+        present(alert, animated: false, completion: nil)
+        
+    }
+    
 }
 
 //버튼을 담당하는 Extension
 extension MainViewController{
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "DetailViewControllerSegue"{
+            
+            if let vc = segue.destination as? DetailViewController, let item = sender as? String{
+                
+                vc.searchItem = item
+                
+            }
+            
+        }
+        
+    }
+    
+    //@@아무거나 버튼 생성해야함@@
+    
+    @IBAction func EatBtn(_ sender: Any) {
+        
+        guard  let _ = WeatherInfo else {
+            showAlert()
+            return
+        }
+        
+        performSegue(withIdentifier: "DetailViewControllerSegue", sender: "식당")
+        
+     }
+  
+     @IBAction func CafeBtn(_ sender: Any) {
+        
+        guard  let _ = WeatherInfo else {
+                   showAlert()
+                   return
+               }
+        
+        performSegue(withIdentifier: "DetailViewControllerSegue", sender: "카페")
+        
+     }
+     @IBAction func DrinkBtn(_ sender: Any) {
+        
+        guard  let _ = WeatherInfo else {
+                   showAlert()
+                   return
+               }
+        
+        performSegue(withIdentifier: "DetailViewControllerSegue", sender: "술")
+        
+     }
+    
+    @IBAction func ActivityBtn(_ sender: Any) {
+         
+         guard  let _ = WeatherInfo else {
+                    showAlert()
+                    return
+                }
+         
+         performSegue(withIdentifier: "DetailViewControllerSegue", sender: "활동")
+         
+      }
+    
+    @IBAction func OutSideActivityBtn(_ sender: Any) {
+    
+        guard  let _ = WeatherInfo else {
+                          showAlert()
+                          return
+                      }
+               
+               performSegue(withIdentifier: "DetailViewControllerSegue", sender: "활동")
+    
+    }
+      
     
     @IBAction func Logout(_ sender: Any) {
            
@@ -270,3 +358,4 @@ class ClothCell : UICollectionViewCell {
     }
     
 }
+

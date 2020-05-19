@@ -15,6 +15,10 @@ class LaunchViewController: UIViewController{
     //https://sanghuiiiiii.tistory.com/entry/SWIFT-현재-위치-주소-가져오기-미세먼지앱-1-Day?category=674800
     var location = MainViewModel.shared.location
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //함수 내부에 CLLocationManager을 하면 안되고 따로 변수를 빼줘서 ViewDidLoad에 설정해줘야한다,

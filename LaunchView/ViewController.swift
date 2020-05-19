@@ -23,6 +23,10 @@ struct Temp2 : Codable{
 
 class ViewController: UIViewController {
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
     override func viewDidLoad() {
            super.viewDidLoad()
            layout()
