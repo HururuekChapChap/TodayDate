@@ -24,5 +24,6 @@ struct MessageInfo : Codable {
     let id : Int
     let name : String
     let addr : String
+    let img : String
     let tag : String
 }

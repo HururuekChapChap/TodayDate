@@ -21,18 +21,18 @@ class DetailViewController: UIViewController {
             
         }
     }
+    
     let apiViewModel = APIViewModel()
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
-    }
-    
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //네이게이션 바를 제거해줌, 숨기는것이 아님 투명하게 해줌
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        //navigationController?.navigationBar.shadowImage = UIImage() //네비게이션 아래 선을 제거 해줌
         print(searchItem!)
         
-        apiViewModel.SendUserInfoPost(sendMessage: "음식점") { (Result) in
+        apiViewModel.SendUserInfoPost(sendMessage: searchItem!) { (Result) in
             
             switch Result{
                 
@@ -49,8 +49,11 @@ class DetailViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+}
 
-
+extension DetailViewController {
+    
+    
 }
 
 extension DetailViewController : UITableViewDelegate, UITableViewDataSource{
@@ -67,10 +70,12 @@ extension DetailViewController : UITableViewDelegate, UITableViewDataSource{
             return UITableViewCell()
         }
         
-        cell.updateUI(name: storeInfo.info[indexPath.row].name)
+        cell.updateUI(StoreInfo: storeInfo.info[indexPath.row])
         
           return cell
       }
+    
+    
       
     
 }

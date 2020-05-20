@@ -11,6 +11,8 @@ import UIKit
 class DetailTableViewCell: UITableViewCell {
 
     @IBOutlet weak var StoreName: UILabel!
+    @IBOutlet weak var StoreAddr: UILabel!
+    @IBOutlet weak var StoreImg: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -32,8 +34,27 @@ class DetailTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func updateUI(name : String){
-        StoreName.text = name
+    func updateUI(StoreInfo : MessageInfo){
+        StoreName.text = StoreInfo.name
+        StoreAddr.text = StoreInfo.addr
+        
+        //이미지의 테두리 설정!
+        StoreImg.layer.borderWidth = 2
+        StoreImg.layer.borderColor = UIColor.systemPink.cgColor
+        StoreImg.layer.cornerRadius = 15
+        
+        DispatchQueue.global().async {
+            
+            guard let imageData = try? Data(contentsOf: URL(string: StoreInfo.img)!) else {
+                self.StoreImg.image = UIImage(named: "Sun.png")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.StoreImg.image = UIImage(data: imageData)
+            }
+            
+        }
     }
 
 }

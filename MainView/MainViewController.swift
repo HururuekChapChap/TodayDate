@@ -36,9 +36,6 @@ class MainViewController: UIViewController {
     
     @IBOutlet weak var CollectionViewItem: UICollectionView!
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
-    }
     
     //스토어 프로퍼티를 정의 해주었다.
     var WeatherInfo : WeatherInfo? {
@@ -68,7 +65,6 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
            super.viewDidLoad()
-        
 //        //클로저를 통해서 결과값이 반환이 된다면 그때 수행하도록 하였다.
         weatherModel.GetWeatherInfo { (result) in
 
@@ -87,7 +83,6 @@ class MainViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         updateInfo()
     }
         
@@ -194,7 +189,7 @@ extension MainViewController{
             return
         }
         
-        performSegue(withIdentifier: "DetailViewControllerSegue", sender: "식당")
+        performSegue(withIdentifier: "DetailViewControllerSegue", sender: "식사")
         
      }
   
@@ -226,7 +221,7 @@ extension MainViewController{
                     return
                 }
          
-         performSegue(withIdentifier: "DetailViewControllerSegue", sender: "활동")
+         performSegue(withIdentifier: "DetailViewControllerSegue", sender: "실내활동")
          
       }
     
@@ -237,7 +232,7 @@ extension MainViewController{
                           return
                       }
                
-               performSegue(withIdentifier: "DetailViewControllerSegue", sender: "활동")
+               performSegue(withIdentifier: "DetailViewControllerSegue", sender: "야외활동")
     
     }
       

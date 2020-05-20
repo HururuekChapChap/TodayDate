@@ -15,6 +15,7 @@ class LaunchViewController: UIViewController{
     //https://sanghuiiiiii.tistory.com/entry/SWIFT-현재-위치-주소-가져오기-미세먼지앱-1-Day?category=674800
     var location = MainViewModel.shared.location
     
+    //status bar의 색깔을 검정으로 해줌
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
     }
