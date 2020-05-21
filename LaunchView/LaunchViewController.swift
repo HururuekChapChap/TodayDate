@@ -11,6 +11,7 @@ import CoreLocation
 
 class LaunchViewController: UIViewController{
     
+    @IBOutlet weak var NsTopToTitle: NSLayoutConstraint!
     //현재 위치 정보 가져오기
     //https://sanghuiiiiii.tistory.com/entry/SWIFT-현재-위치-주소-가져오기-미세먼지앱-1-Day?category=674800
     var location = MainViewModel.shared.location
@@ -22,6 +23,9 @@ class LaunchViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NsTopToTitle.constant = view.bounds.height * 0.07
+        
         //함수 내부에 CLLocationManager을 하면 안되고 따로 변수를 빼줘서 ViewDidLoad에 설정해줘야한다,
         location = CLLocationManager()
         //Delegate를 해줘야 특별한 설정이 가능하다. - CLLocationManagerDelegate 클래스 상속

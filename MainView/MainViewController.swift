@@ -319,7 +319,7 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
     //이미지의 크기를 80 * 80 으로 해줬고 storyBoard에서 SizeExpecter - Estimate Size를 None으로 해준더. (Horizontal CollectionView일 경우)
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
               
-              return CGSize(width: 80, height: 80)
+              return CGSize(width: 60, height: 60)
               
           }
   
