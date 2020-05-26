@@ -25,7 +25,8 @@ class DetailTableViewCell: UITableViewCell {
         super.prepareForReuse()
         
         StoreName.text = nil
-        
+        StoreImg.image = nil
+        StoreAddr.text = nil
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

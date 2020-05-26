@@ -25,6 +25,8 @@ class MainViewModel  {
     
     var ISGetWeather : Bool = false
     
+    let NsCacheIMG = NSCache<NSString,UIImage>()
+    
     func setLocation(latitude : String?, longitude: String?){
         if let lati = latitude, let longi = longitude {
             self.latitude = lati

@@ -10,6 +10,26 @@ import Foundation
 
 class APIViewModel {
     
+    let imageCache = MainViewModel.shared.NsCacheIMG
+    
+    func getImageData(urlLink : String, handler : @escaping (Result<UIImage,APIError>) -> () ){
+        
+        guard let url = URL(string: urlLink) else {
+            handler(.failure(.GotError))
+            return
+        }
+        
+        guard let ImageData = try? Data(contentsOf: url) , let Image = UIImage(data: ImageData)  else {
+            handler(.failure(.GotError))
+            return
+        }
+        
+        imageCache.setObject(Image, forKey: urlLink as NSString)
+        
+        handler(.success(Image))
+        
+    }
+    
     func SendUserInfoPost(sendMessage : String, handler : @escaping (Result<StoreInfo,APIError>) -> () ){
            
            //post 방식으로 받을 웹서버 주소를 적어준다.

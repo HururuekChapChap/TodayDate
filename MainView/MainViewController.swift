@@ -322,9 +322,7 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
               return CGSize(width: 60, height: 60)
               
           }
-  
-    
-    
+
 }
 
 

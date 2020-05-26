@@ -54,6 +54,14 @@ class DetailViewController: UIViewController {
 extension DetailViewController {
     
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "ContentSegue" {
+            
+        }
+        
+    }
+    
 }
 
 extension DetailViewController : UITableViewDelegate, UITableViewDataSource{
@@ -75,7 +83,9 @@ extension DetailViewController : UITableViewDelegate, UITableViewDataSource{
           return cell
       }
     
-    
-      
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        performSegue(withIdentifier: "ContentSegue", sender: nil)
+    }
     
 }
