@@ -55,7 +55,7 @@ class MainViewController: UIViewController {
     
     var collectioinViewImgList : [String] = []
     
-    let clothesList : [String] = ["Sun.png","heart.png","Sun.png","heart.png","Sun.png","heart.png","Sun.png","heart.png"]
+    let clothesList : [String] = ["Asset 18.png","Asset 19.png","Asset 18.png","Asset 19.png","Asset 18.png","Asset 19.png"]
     
     let weatherModel = WeatherModel()
     

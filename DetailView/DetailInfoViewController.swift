@@ -7,20 +7,69 @@
 //
 
 import UIKit
+import MapKit
 
 class DetailInfoViewController: UIViewController, UIScrollViewDelegate {
 
+    @IBOutlet weak var StoreName: UILabel!
+    @IBOutlet weak var StoreAddr: UILabel!
+    @IBOutlet weak var StorePhone: UILabel!
+    @IBOutlet weak var StoreRate: UILabel!
+    @IBOutlet weak var StoreComment: UILabel!
+    
+    @IBOutlet weak var MapView: MKMapView!
+    
     @IBOutlet weak var ScrollView: UIScrollView!
     @IBOutlet weak var FrameView: UIView!
     @IBOutlet weak var FrameWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var PageControl: UIPageControl!
     
+    //가게의 정보를 이전 페이지에서 부터 가져온다.
+    var storeInfo : MessageInfo?
+    //api기능이 들어있는 곳에서 기능을 가져온다.
     let apiVeiwModle = APIViewModel()
     //NSCache는 싱글톤으로 하여서 어디서든 사용가능하도록 해야한다.
     let imageCache = MainViewModel.shared.NsCacheIMG
+    //
+    var infoDetail : InfoArray?{
+        didSet{
+            DispatchQueue.main.async {
+                self.setBasicUI()
+            }
+        }
+    }
+    
+    var imageList : [ImageList]?{
+        didSet{
+            DispatchQueue.main.async {
+                self.setPageView()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        apiVeiwModle.getInfodetail(id: storeInfo!.id) { (result) in
+            switch result {
+                
+            case .success(let infoArray):
+                self.infoDetail = infoArray
+            case .failure(_):
+                print("got Error from infoDetail")
+            }
+        }
+        
+        apiVeiwModle.getImageList(id: storeInfo!.id) { (result) in
+            switch result {
+                
+            case .success(let imgList):
+                self.imageList = imgList
+            case .failure(_):
+                print("got Error from getImageList")
+            }
+        }
+        
         setPageView()
         ScrollView.delegate = self
             
@@ -38,20 +87,53 @@ class DetailInfoViewController: UIViewController, UIScrollViewDelegate {
 
 extension DetailInfoViewController{
     
+    func setBasicUI(){
+        
+        guard let storeInfo = storeInfo , let infoDetail = infoDetail else {return}
+        
+        StoreName.text = storeInfo.name
+        StoreAddr.text = storeInfo.addr
+        
+        StorePhone.text = infoDetail.tel
+        StoreRate.text = String(infoDetail.avg)
+        StoreComment.text = infoDetail.info
+        
+        setMapView(name: storeInfo.name, lati: infoDetail.latitude, longi: infoDetail.longitude)
+    }
+    
+    func setMapView(name : String, lati : String, longi : String){
+        
+        guard  let latitude = Double(lati), let longitude = Double(longi) else {
+            return
+        }
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = CLLocationCoordinate2DMake(latitude, longitude)
+        annotation.title = name
+               
+        let region = MKCoordinateRegion(center: annotation.coordinate, latitudinalMeters: 300, longitudinalMeters: 300)
+        MapView.setRegion(region, animated: true)
+        MapView.addAnnotation(annotation)
+        
+    }
+    
+    
     func setPageView(){
         
-        let ImageArray = ["http://img.mintpass.kr/1/1.jpg", "http://img.mintpass.kr/1/2.jpg"]
+        guard let ImageArray = imageList else {return}
+        
+       // let ImageArray = ["http://img.mintpass.kr/1/1.jpg", "http://img.mintpass.kr/1/2.jpg"]
         PageControl.numberOfPages = 0
         for index in 0..<ImageArray.count{
             
             //NSCache로 구현하여 중복된 이미지의 링크가 있다면 있는 것을 사용한다.
-            if let ImageData =  imageCache.object(forKey: ImageArray[index] as NSString) {
+            if let ImageData =  imageCache.object(forKey: ImageArray[index].url as NSString) {
                 print("get From NScache")
                 setImageView(Image: ImageData)
             }
             else{
              
-                apiVeiwModle.getImageData(urlLink: ImageArray[index]) { result in
+                apiVeiwModle.getImageData(urlLink: ImageArray[index].url) { result in
                                
                   switch result {
                                    

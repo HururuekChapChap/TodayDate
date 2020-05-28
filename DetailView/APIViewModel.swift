@@ -12,6 +12,74 @@ class APIViewModel {
     
     let imageCache = MainViewModel.shared.NsCacheIMG
     
+    func getImageList(id : Int , handler : @escaping (Result<[ImageList],APIError>)->()){
+        
+        let url : String = "http://img.mintpass.kr/api/\(id)"
+        
+        guard let realUrl = URL(string: url) else {
+            print("realURL Fail")
+            handler(.failure(.GotError))
+            return
+        }
+        URLSession.shared.dataTask(with: realUrl) { (data, _, _) in
+            
+            guard let data = data else {
+                handler(.failure(.GotError))
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            
+            do {
+                
+                let decodeResult = try decoder.decode(ImageInfos.self, from: data)
+                
+                handler(.success(decodeResult.imginfo))
+                
+                
+            } catch  {
+                print(error.localizedDescription)
+                handler(.failure(.GotError))
+            }
+            
+        }.resume()
+        
+    }
+    
+    func getInfodetail(id : Int , handler : @escaping (Result<InfoArray,APIError>)->()){
+        
+        let url : String = "http://project.mintpass.kr:3000/location/\(id)"
+        
+        guard let realUrl = URL(string: url) else {
+            print("realURL Fail")
+            handler(.failure(.GotError))
+            return
+        }
+        URLSession.shared.dataTask(with: realUrl) { (data, _, _) in
+            
+            guard let data = data else {
+                handler(.failure(.GotError))
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            
+            do {
+                
+                let decodeResult = try decoder.decode(InfoDetail.self, from: data)
+                
+                handler(.success(decodeResult.infodetail[0]))
+                
+                
+            } catch  {
+                print(error.localizedDescription)
+                handler(.failure(.GotError))
+            }
+            
+        }.resume()
+        
+    }
+    
     func getImageData(urlLink : String, handler : @escaping (Result<UIImage,APIError>) -> () ){
         
         guard let url = URL(string: urlLink) else {

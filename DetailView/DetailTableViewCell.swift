@@ -40,8 +40,8 @@ class DetailTableViewCell: UITableViewCell {
         StoreAddr.text = StoreInfo.addr
         
         //이미지의 테두리 설정!
-        StoreImg.layer.borderWidth = 2
-        StoreImg.layer.borderColor = UIColor.systemPink.cgColor
+        StoreImg.layer.borderWidth = 1
+        StoreImg.layer.borderColor = UIColor.black.cgColor
         StoreImg.layer.cornerRadius = 15
         
         DispatchQueue.global().async {

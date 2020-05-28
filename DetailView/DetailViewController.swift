@@ -58,6 +58,10 @@ extension DetailViewController {
         
         if segue.identifier == "ContentSegue" {
             
+            guard let vc = segue.destination as? DetailInfoViewController, let storeInfo = sender as? MessageInfo else {return}
+            
+            vc.storeInfo = storeInfo
+            
         }
         
     }
@@ -85,7 +89,9 @@ extension DetailViewController : UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        performSegue(withIdentifier: "ContentSegue", sender: nil)
+        guard let storeInfo = storeInfo else {return}
+        
+        performSegue(withIdentifier: "ContentSegue", sender: storeInfo.info[indexPath.row])
     }
     
 }
