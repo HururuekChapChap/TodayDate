@@ -14,9 +14,13 @@ struct TagInfo : Codable {
     
 }
 
+struct SendWeather : Codable {
+    let weather : String
+}
+
 struct StoreInfo : Codable {
     
-    let info : [MessageInfo]
+    var info : [MessageInfo]
     
 }
 
@@ -26,4 +30,13 @@ struct MessageInfo : Codable {
     let addr : String
     let img : String
     let tag : String
+    
+    let Thunderstorm : Int?
+    let Drizzle : Int?
+    let Rain : Int?
+    let Snow : Int?
+    let Atmosphere : Int?
+    let Clear : Int?
+    let Clouds : Int?
+    
 }

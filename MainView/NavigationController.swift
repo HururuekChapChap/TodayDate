@@ -14,6 +14,10 @@ class NavigationController: UINavigationController , CLLocationManagerDelegate {
     var InfoNode: PersonalInfo?
     let mainViewModel = MainViewModel.shared
     
+    override var childForStatusBarStyle: UIViewController?{
+        return topViewController
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //지역 정보를 다시 받아오기 위해서는 이렇게 다시 location 값을 재설정 해줘야한다!!!

@@ -15,7 +15,7 @@ struct Temp : Codable{
  
 }
 
-struct Temp2 : Codable{
+struct Message : Codable{
     
     let message : String
     
@@ -23,9 +23,6 @@ struct Temp2 : Codable{
 
 class ViewController: UIViewController {
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
-    }
     
     override func viewDidLoad() {
            super.viewDidLoad()
@@ -75,7 +72,7 @@ extension ViewController{
                
                KOSessionTask.userMeTask(completion: { (error, user) in
                            guard let user = user,
-                            let nickname = user.nickname, let id = user.id else {
+                            let nickname = user.account?.profile?.nickname, let id = user.id else {
                                 
                                 self.ViewAlert(message: "카카오톡 로그인 오류 입니다.")
                                 
@@ -211,7 +208,7 @@ extension ViewController{
                     print(jsonString)
                     do {
                         //받았으면 decode 해주고 성공 메시지를 보내준다.
-                        let myjson = try Decoder.decode(Temp2.self, from: data)
+                        let myjson = try Decoder.decode(Message.self, from: data)
                         print(myjson.message)
                         handler(.success(myjson.message))
                    } catch  {

@@ -10,6 +10,113 @@ import Foundation
 
 class WeatherModel{
     
+    func getUIImage(url : String) ->UIImage?{
+        
+        guard let url = URL(string: url) else {
+            print("Cannot Get Random UIImage URL")
+            return nil}
+        
+        guard let imageData = try? Data(contentsOf: url) else {
+            print("Cannot Get Random UIImage Data")
+            return nil
+        }
+        
+        return UIImage(data: imageData)
+        
+    }
+    
+    func ClassifyWeather(weatherID : Int)->String?{
+        
+        var sendInfo : String?
+        
+        if weatherID < 300 {
+                sendInfo =  "Thunderstorm"
+        }
+        else if weatherID < 500 {
+               sendInfo =  "Drizzle"
+        }
+        else if weatherID < 600 {
+                sendInfo =  "Rain"
+        }
+        else if weatherID < 700 {
+                sendInfo =  "Snow"
+        }
+        else if weatherID < 800 {
+                sendInfo =  "Atmosphere"
+        }
+        else if weatherID == 800 {
+                sendInfo = "Clear"
+        }
+        else if weatherID > 800 {
+                sendInfo = "Clouds"
+        }
+        
+        return sendInfo
+    }
+    
+    func SendWeatherInfoPost(sendMessage : String, handler : @escaping (Result<StoreInfo,APIError>) -> () ){
+        
+        //post 방식으로 받을 웹서버 주소를 적어준다.
+        guard let url = URL(string: "http://project.mintpass.kr:3000/random") else {
+            handler(.failure(.GotError))
+            return
+        }
+        //request 형식으로 주소를 받아준다.
+        var request = URLRequest(url: url)
+        
+        //전송방식을 POST로
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept-Type")
+        
+        //인코딩 해주는 것과 디코딩을 설정해주고
+        let Encoder = JSONEncoder()
+        let Decoder = JSONDecoder()
+        
+        //보내줄 정보를 Codable구조체로 만들어준다,
+        let tagInfo = SendWeather(weather:sendMessage)
+        Encoder.outputFormatting = .prettyPrinted
+        
+        do {
+            //보내주기 위해서 data형식으로 인코딩 해준다,
+            let jsonData = try Encoder.encode(tagInfo)
+            
+            print(jsonData)
+            //httpbody로 보내줄 준비 해주고
+            request.httpBody = jsonData
+            
+            //그리고 나서 with url이 아니라 request로 데이터를 전송해주고
+            URLSession.shared.dataTask(with: request) { (data, response, error) in
+                if let error = error{
+                    handler(.failure(.GotError))
+                    print("Error took place \(error)")
+                }
+                
+                //오류없이 데이터를 받았다면 아래와 같이 다시 해독해주고 반응을 살핀다.
+                guard let data = data, let jsonString = String(data: jsonData, encoding: .utf8) else {
+                    handler(.failure(.GotError))
+                    return
+                    
+                }
+                    print(data)
+                    print(jsonString)
+                    do {
+                        //받았으면 decode 해주고 성공 메시지를 보내준다.
+                        let myjson = try Decoder.decode(StoreInfo.self, from: data)
+                        handler(.success(myjson))
+                   } catch  {
+                        handler(.failure(.GotError))
+                        print("\(error.localizedDescription)")
+                    }
+                
+            }.resume()
+            
+        } catch  {
+            handler(.failure(.GotError))
+        }
+        
+        
+    }
     
     //JSON API를 가져오는 방법
     //https://www.youtube.com/watch?v=tdxKIPpPDAI&t=1012s

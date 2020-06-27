@@ -19,6 +19,7 @@ class MainViewModel  {
     
     var PersonalInfo: PersonalInfo?
     var location : CLLocationManager?
+    var weatherInfo : WeatherInfo?
     
     var latitude : String?
     var longitude : String?

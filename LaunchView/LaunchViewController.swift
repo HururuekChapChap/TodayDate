@@ -11,6 +11,9 @@ import CoreLocation
 
 class LaunchViewController: UIViewController{
     
+    //앱 이름 바꾸는 방법
+    //https://www.ioscreator.com/tutorials/change-display-name-ios-tutorial
+    
     @IBOutlet weak var NsTopToTitle: NSLayoutConstraint!
     //현재 위치 정보 가져오기
     //https://sanghuiiiiii.tistory.com/entry/SWIFT-현재-위치-주소-가져오기-미세먼지앱-1-Day?category=674800
@@ -59,7 +62,6 @@ class LaunchViewController: UIViewController{
             vc.InfoNode = userInfo
             
             self.present(vc, animated: true, completion: nil)
-            
             
         }
         else{

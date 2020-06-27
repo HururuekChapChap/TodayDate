@@ -2,19 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>앱 위치를 항상 가져옴</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>앱을 열 때 마다 위치주소 가져오기 허용</string>
-	<key>KAKAO_APP_KEY</key>
-	<string>3488cc6e1688fe006f8b7e057755ba3e</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>오늘어때</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -40,8 +31,31 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-9919812549402833~5330821028</string>
+	<key>KAKAO_APP_KEY</key>
+	<string>3488cc6e1688fe006f8b7e057755ba3e</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>kakao3488cc6e1688fe006f8b7e057755ba3e</string>
+		<string>kakaokompassauth</string>
+		<string>storykompassauth</string>
+		<string>kakaolink</string>
+		<string>kakaotalk-5.9.7</string>
+		<string>storylink</string>
+		<string>tel</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>앱 위치를 항상 가져옴</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>앱을 열 때 마다 위치주소 가져오기 허용</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -69,6 +83,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleDefault</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -79,15 +95,6 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>kakao3488cc6e1688fe006f8b7e057755ba3e</string>
-		<string>kakaokompassauth</string>
-		<string>storykompassauth</string>
-		<string>kakaolink</string>
-		<string>kakaotalk-5.9.7</string>
-		<string>storylink</string>
 	</array>
 </dict>
 </plist>

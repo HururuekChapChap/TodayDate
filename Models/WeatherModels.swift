@@ -33,6 +33,7 @@ struct Main : Codable{
 
 struct Weather : Codable{
     
+    let id : Int
     let icon : String
     let description : String
     
