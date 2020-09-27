@@ -19,6 +19,8 @@ class APIViewModel {
     
     let imageCache = MainViewModel.shared.NsCacheIMG
     
+    var storeHash  :  [ String : [ MessageInfo ] ] = [:]
+    
     func showAlert(title: String, text : String) ->UIAlertController {
 
             let alert = UIAlertController(title: title, message: text, preferredStyle: UIAlertController.Style.alert)
@@ -261,8 +263,9 @@ extension APIViewModel {
                        
                     for tag in tagString{
                            
-                           set.insert(tag)
-                           
+                        set.insert(tag)
+                        self.storeHash[tag , default :[]].append(element)
+                        
                        }
                    
                 }
@@ -273,6 +276,11 @@ extension APIViewModel {
         
         
     }
+    
+    func  classifyStore(_   tag  :  String) ->  [ MessageInfo ]  {
+        return  storeHash[tag] ??  []
+    }
+
     
 }
 

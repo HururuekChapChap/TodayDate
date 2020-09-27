@@ -21,7 +21,6 @@ class DetailViewController: UIViewController {
     var searchItem : String?
     var clickedButton : Int?
     var tagButtonList : [UIButton] = [UIButton]()
-
     
     var storeInfo : StoreInfo?{
         didSet{
@@ -100,25 +99,25 @@ class DetailViewController: UIViewController {
     }
     
     @IBAction func TagSearchBtn(_ sender: Any) {
-        guard let storeInfo = storeInfo else {return}
+//        guard let storeInfo = storeInfo else {return}
         guard let searchItem = searchItem else {return}
         
-        let filtered = storeInfo.info.filter { (message) -> Bool in
-            
-            let tags = message.tag.components(separatedBy: ", ")
-            
-            for tag in tags {
-                
-                if tag == searchItem {
-                    return true
-                }
-
-            }
-            
-            return false
-        }
-        
-       tempStoreInfo = filtered
+//        let filtered = storeInfo.info.filter { (message) -> Bool in
+//
+//            let tags = message.tag.components(separatedBy: ", ")
+//
+//            for tag in tags {
+//
+//                if tag == searchItem {
+//                    return true
+//                }
+//
+//            }
+//
+//            return false
+//        }
+//
+        tempStoreInfo = apiViewModel.classifyStore(searchItem)
         
     DispatchQueue.main.async {
         self.tableView.reloadData()
@@ -169,8 +168,7 @@ extension DetailViewController {
             //이 스택 뷰를 상위 스택뷰에 넣어준다.
             VerticalStackView.addArrangedSubview(stackview)
         }
-        
-        
+  
     }
     
     @objc func buttonTapped(sender : UIButton){
