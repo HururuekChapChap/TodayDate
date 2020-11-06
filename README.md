@@ -1,5 +1,16 @@
 # TodayDate
- 4-1학기 종합 설계 프로젝트(완료)
+ School Team Project 
+ 
+# Date
+
+2020.03 ~ 2020.06 (Develope)
+2020.06 ~ 2020.09 (Service)
+
+# Result
+
+received an encouragement award in Catholic University Capston Competition 
+
+
 
 # 기능
 
