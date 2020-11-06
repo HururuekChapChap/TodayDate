@@ -8,10 +8,12 @@
 
 # Result
 
-received an encouragement award in Catholic University Capston Competition 
-
 <p  align="center" >
 <img src = "https://user-images.githubusercontent.com/57618897/98372510-3828cc80-2081-11eb-880f-8a57bbeb3d1f.gif">
+</p>
+
+<p  align="center" >
+Received an encouragement award in Catholic University Capston Competition 
 </p>
  
 # Function
