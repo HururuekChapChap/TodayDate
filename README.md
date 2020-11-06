@@ -10,9 +10,11 @@
 
 received an encouragement award in Catholic University Capston Competition 
 
-
-
-# 기능
+<p  align="center" >
+<img src = "https://user-images.githubusercontent.com/57618897/98372510-3828cc80-2081-11eb-880f-8a57bbeb3d1f.gif">
+</p>
+ 
+# Function
 
 1. 날씨 API 활용하여 현재 날씨 파악 및 날씨에 따른 의상/상가 추천 (https://openweathermap.org/api)
 
@@ -25,3 +27,10 @@ received an encouragement award in Catholic University Capston Competition
 5. 맘에 드는 상가 친구에게 추천
 
 6. KAKAO 로그인 API 활용
+
+# What I Learn
+
++ First IOS Team Project
++ Team Work
++ Responsibility
+
