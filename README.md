@@ -37,4 +37,4 @@ Received an encouragement award in Catholic University Capston Competition
 + First IOS Team Project
 + Team Work
 + Responsibility
-
++ Overcome failure
